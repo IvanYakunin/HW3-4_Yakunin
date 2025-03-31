@@ -112,5 +112,5 @@ docker-compose up --build
 ```bash
 pip install -r requirements.txt
 redis-server
-uvicorn main:app --reload
+uvicorn src.main:app --reload
 ```
