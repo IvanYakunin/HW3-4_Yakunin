@@ -121,5 +121,14 @@ uvicorn src.main:app --reload
 
 ### Отчёты
 
-- [Locust HTML отчет](reports/Locust_report.html)
-- [Отчёт по другим тестам](reports/index.html)
+![Locust HTML отчет](reports/Locust_report.html)
+![Отчёт по покрытию HTML](reports/index.html)
+
+
+![Locust png отчет 1](reports/Locust-1.png)
+![Locust png отчет 2](reports/Locust-2.png)
+![Locust png отчет 3](reports/Locust-3.png)
+![Locust png отчет 4](reports/Locust-4.png)
+![Locust png отчет 5](reports/Locust-5.png)
+
+![Отчёт по покрытию PNG](reports/Coverage_report-1.png)
