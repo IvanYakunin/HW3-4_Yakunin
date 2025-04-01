@@ -1,5 +1,5 @@
 import asyncio
-from src.service.UrlService import UrlService
+from service.UrlService import UrlService
 
 url_service = UrlService()
 

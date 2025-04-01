@@ -8,10 +8,10 @@ from fastapi.exceptions import HTTPException
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
-from src.DataClasses.DataClasses import LongUrlDC, CreateShortUrlDC, ShortUrlDC, ShortUrlStatsDC
-from src.Database.main_db import SessionLocal, User, ExpiredUrl
-from src.DbManager.MainDbManager import MainDbManager, ShortUrl
-from src.DbManager.RedisDbManager import RedisDbManager
+from DataClasses.DataClasses import LongUrlDC, CreateShortUrlDC, ShortUrlDC, ShortUrlStatsDC
+from Database.main_db import SessionLocal, User, ExpiredUrl
+from DbManager.MainDbManager import MainDbManager, ShortUrl
+from DbManager.RedisDbManager import RedisDbManager
 
 VALID_ALIAS_CHARS = string.ascii_letters + string.digits + "_"
 

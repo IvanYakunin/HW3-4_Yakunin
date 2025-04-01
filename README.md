@@ -114,3 +114,12 @@ pip install -r requirements.txt
 redis-server
 uvicorn src.main:app --reload
 ```
+
+## Тестирование
+
+Проект покрыт юнит-тестами и функциональными тестами с использованием `pytest`, а также нагрузочными тестами с `Locust`
+
+### Отчёты
+
+- [Locust HTML отчет](reports/Locust_report.html)
+- [Отчёт по другим тестам](reports/index.html)

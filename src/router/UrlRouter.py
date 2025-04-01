@@ -1,13 +1,13 @@
 from fastapi import APIRouter, HTTPException, Depends
-from src.Dependencies.AuthScheme import optional_oauth2_scheme
-from src.Database.main_db import User
+from Dependencies.AuthScheme import optional_oauth2_scheme
+from Database.main_db import User
 from sqlalchemy.orm import Session
 
-from src.Database.main_db import SessionLocal
+from Database.main_db import SessionLocal
 from fastapi.responses import RedirectResponse
-from src.DataClasses.DataClasses import LongUrlDC, CreateShortUrlDC, ShortUrlDC, ShortUrlStatsDC, UpdateUrlDC
-from src.service.UrlService import UrlService
-from src.service.AuthService import AuthService
+from DataClasses.DataClasses import LongUrlDC, CreateShortUrlDC, ShortUrlDC, ShortUrlStatsDC, UpdateUrlDC
+from service.UrlService import UrlService
+from service.AuthService import AuthService
 
 router = APIRouter()
 url_service = UrlService()

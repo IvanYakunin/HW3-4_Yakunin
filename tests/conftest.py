@@ -1,4 +1,8 @@
-# tests/conftest.py
+import sys
+import os
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src")))
+
 import pytest
 import pytest_asyncio
 from httpx import AsyncClient
@@ -8,7 +12,6 @@ from unittest.mock import MagicMock
 from Database.redis import get_redis_client
 from sqlalchemy.orm import Session
 from Database.main_db import SessionLocal
-
 @pytest.fixture
 def get_db():
     db = SessionLocal()

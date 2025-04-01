@@ -7,9 +7,9 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 from passlib.context import CryptContext
 
-from src.Database.main_db import User
-from src.DataClasses.DataClasses import UserCreateDC, TokenDC
-from src.Database.redis import get_redis_client
+from Database.main_db import User
+from DataClasses.DataClasses import UserCreateDC, TokenDC
+from Database.redis import get_redis_client
 
 class AuthService:
     SECRET_KEY = "your_secret_key"

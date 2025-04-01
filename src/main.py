@@ -1,11 +1,16 @@
+import sys
+import os
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src")))
+
 from fastapi import FastAPI
 from fastapi import Request
 from contextlib import asynccontextmanager
 import asyncio
 
-from src.router.UrlRouter import router
-from src.router.AuthRouter import router as auth_router
-from src.Cleaner.cleaner import periodic_expired_cleanup
+from router.UrlRouter import router
+from router.AuthRouter import router as auth_router
+from Cleaner.cleaner import periodic_expired_cleanup
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

@@ -1,70 +1,60 @@
-from locust import HttpUser, task, between
+from locust import HttpUser, task, between, events
 import random
 import json
+import requests
 
-with open("tests/load/aliases.json") as f:
-    ALIASES = json.load(f)
+# Глобальный список ссылок, доступный всем пользователям
+global_aliases = []
 
-with open("tests/load/users.json") as f:
-    USERS = json.load(f)
 
-def random_url():
-    return "https://example.com/" + ''.join(random.choices("abcdefghijklmnopqrstuvwxyz", k=10))
+@events.test_start.add_listener
+def on_test_start(environment, **kwargs):
+    print("Generating links")
 
-def safe_json(response):
-    try:
-        return response.json()
-    except Exception:
-        return {}
+    for i in range(10):
+        payload = {
+            "url": f"https://example.com/test-{i}",
+            "alias": f"alias{i}"
+        }
 
-class BaseUser(HttpUser):
-    wait_time = between(0.5, 2)
-
-    @task(2)
-    def visit_link(self):
-        alias = random.choice(ALIASES)
-        self.client.get(f"/links/{alias}")
-
-    @task(1)
-    def get_stats(self):
-        alias = random.choice(ALIASES)
-        self.client.get(f"/links/{alias}/stats")
-
-class AnonymousUser(BaseUser):
-    @task(2)
-    def create_short_url(self):
-        url = random_url()
-        self.client.post("/links/shorten", json={"url": url})
-
-class AuthUser(BaseUser):
-    def on_start(self):
-        user = random.choice(USERS)
-        r = self.client.post("/auth/login", data={
-            "username": user["email"],
-            "password": user["password"]
-        })
-        data = safe_json(r)
-        token = data.get("access_token")
-        self.headers = {"Authorization": f"Bearer {token}"}
-        self.own_aliases = user["aliases"]
-
-    @task(2)
-    def create_short_url(self):
-        url = random_url()
-        r = self.client.post("/links/shorten", json={"url": url}, headers=self.headers)
-        if r.status_code == 200:
-            self.own_aliases.append(r.json()["url"])
-
-    @task(1)
-    def delete_link(self):
-        if self.own_aliases:
-            alias = random.choice(self.own_aliases)
-            r = self.client.delete(f"/links/{alias}", headers=self.headers)
-
-            if r.status_code == 200:
-                print(f"🗑️ Deleted: {alias}")
-                self.own_aliases.remove(alias)
-                if alias in ALIASES:
-                    ALIASES.remove(alias)
+        try:
+            response = requests.post("http://localhost:8000/links/shorten", json=payload)
+            if response.status_code == 200:
+                alias = response.json()["url"]
+                global_aliases.append(alias)
+            elif response.status_code == 409:
+                # Если alias уже существует, всё равно добавляем его
+                alias = payload["alias"]
+                global_aliases.append(alias)
+                print(f"Alias '{alias}' already exists, added anyway.")
             else:
-                print(f"Failed to delete {alias}: {r.status_code}")
+                print(f"Failed to create alias{i}: {response.status_code} - {response.text}")
+        except Exception as e:
+            print(f"Error while creating alias{i}: {e}")
+
+    print(f"Prepared aliases: {global_aliases}")
+
+
+class UrlShortenerUser(HttpUser):
+    wait_time = between(1, 3)
+
+    @task(1)
+    def test_redirect(self):
+        if global_aliases:
+            short_code = random.choice(global_aliases)
+            with self.client.get(f"/links/{short_code}", allow_redirects=False, catch_response=True) as resp:
+                if resp.status_code != 302:
+                    resp.failure(f"Expected 302 but got {resp.status_code}: {resp.text}")
+
+
+    @task(1)
+    def test_stats(self):
+        if global_aliases:
+            short_code = random.choice(global_aliases)
+            self.client.get(f"/links/{short_code}/stats")
+
+    @task(1)
+    def test_search(self):
+        idx = random.randint(0, 9)
+        original_url = f"https://example.com/test-{idx}"
+        self.client.get(f"/links/search", params={"original_url": original_url})

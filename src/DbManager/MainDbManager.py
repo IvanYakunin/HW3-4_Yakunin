@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
-from src.Database.main_db import ShortUrl, ExpiredUrl
+from Database.main_db import ShortUrl, ExpiredUrl
 from fastapi import HTTPException
 from datetime import datetime, timezone, timedelta
 from sqlalchemy import and_

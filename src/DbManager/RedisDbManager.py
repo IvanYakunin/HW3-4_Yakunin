@@ -1,5 +1,5 @@
-from src.Database.redis import get_redis_client
-from src.Database.main_db import ShortUrl
+from Database.redis import get_redis_client
+from Database.main_db import ShortUrl
 from datetime import datetime, timezone
 import json
 
