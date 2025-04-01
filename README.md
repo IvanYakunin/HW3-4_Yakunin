@@ -121,8 +121,8 @@ uvicorn src.main:app --reload
 
 ### Отчёты
 
-![Locust HTML отчет](reports/Locust_report.html)
-![Отчёт по покрытию HTML](reports/index.html)
+- [Locust HTML отчет](reports/Locust_report.html)
+- [Отчёт по покрытию HTML](reports/index.html)
 
 
 ![Locust png отчет 1](reports/Locust-1.png)
